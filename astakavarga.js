@@ -75,11 +75,6 @@ const BENEFICIAL_HOUSES = {
 const SIGN_NAMES = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", 
                    "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
 
-const TOTAL_BINDUS = {
-    Sun: 48, Moon: 49, Mars: 39, Mercury: 54, 
-    Jupiter: 56, Venus: 52, Saturn: 39
-};
-
 function calculateAshtakavarga() {
     document.getElementById('loading').style.display = 'block';
     document.getElementById('results').innerHTML = '';
@@ -476,40 +471,3 @@ function createAnalysisTable(results, chart, totalBindus) {
     html += '</div>';
     return html;
 }
-
-// Add additional CSS for the analysis cards
-const additionalCSS = `
-.analysis-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.analysis-card {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-.analysis-card h4 {
-    margin-bottom: 10px;
-    font-size: 1.2em;
-}
-
-.analysis-card p {
-    margin: 5px 0;
-    opacity: 0.9;
-}
-
-.table-container {
-    overflow-x: auto;
-}
-`;
-
-// Inject additional CSS
-const style = document.createElement('style');
-style.textContent = additionalCSS;
-document.head.appendChild(style);
