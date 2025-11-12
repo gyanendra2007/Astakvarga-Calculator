@@ -1,5 +1,5 @@
 // Complete Beneficial Houses for all planets (from the PDF)
-const BENEFICIAL_HOUSES = {
+const BENEFICIAL_HOUSES = { 
     Sun: {
         self: [0, 1, 3, 6, 7, 8, 9, 10],
         Mars: [0, 1, 3, 6, 7, 8, 9, 10],
