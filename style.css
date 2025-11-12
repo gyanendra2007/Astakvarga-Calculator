@@ -310,3 +310,29 @@ tr:hover {
     border-left-color: #f39c12;
     background: #fdebd0;
 }
+/* Add to existing style.css */
+.sarva-prediction-card {
+    background: linear-gradient(135deg, #27ae60, #2ecc71);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin: 10px 0;
+}
+
+.life-period-card {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin: 10px 0;
+}
+
+.neutral-effect {
+    color: #f39c12;
+    font-weight: bold;
+    background: #fdebd0;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
