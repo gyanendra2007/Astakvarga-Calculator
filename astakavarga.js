@@ -75,20 +75,37 @@ const BENEFICIAL_HOUSES = {
 const SIGN_NAMES = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", 
                    "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"];
 
+// Rasi Gunakara factors (constant for all horoscopes)
+const RASI_GUNAKARA = [7, 10, 8, 4, 10, 5, 7, 8, 9, 5, 11, 12];
+
+// Graha Gunakara factors (planetary multipliers)
+const GRAHA_GUNAKARA = {
+    Sun: 5,
+    Moon: 5,
+    Mars: 8,
+    Mercury: 5,
+    Jupiter: 10,
+    Venus: 7,
+    Saturn: 5
+};
+
 function calculateAshtakavarga() {
+    console.log("Calculate button clicked!");
     document.getElementById('loading').style.display = 'block';
     document.getElementById('results').innerHTML = '';
     
     const chart = getChartData();
+    console.log("Chart data:", chart);
     
     setTimeout(() => {
         try {
             const results = performRealCalculations(chart);
+            console.log("Calculation results:", results);
             displayResults(results, chart);
         } catch (error) {
+            console.error('Calculation error:', error);
             document.getElementById('results').innerHTML = 
                 '<div style="color: red; text-align: center; padding: 20px;">Error in calculation: ' + error.message + '</div>';
-            console.error('Calculation error:', error);
         }
         document.getElementById('loading').style.display = 'none';
     }, 500);
@@ -122,10 +139,18 @@ function performRealCalculations(chart) {
     // Calculate Sarvashtakavarga
     const sarvashtakavarga = calculateSarvashtakavarga(bhinnashtakavarga);
     
+    // Calculate Rasi Gunakara, Graha Gunakara, and Shodhya Pinda
+    const gunakaraResults = calculateGunakara(reduced, chart);
+    
+    // Calculate Transit Predictions
+    const transitPredictions = calculateTransitPredictions(reduced, sarvashtakavarga, chart);
+    
     return {
         bhinnashtakavarga,
         reduced,
-        sarvashtakavarga
+        sarvashtakavarga,
+        gunakaraResults,
+        transitPredictions
     };
 }
 
@@ -201,7 +226,6 @@ function ekadhipatyaReduction(table, chart, planet) {
         mercury: [2, 5],  // Gemini, Virgo
         jupiter: [8, 11], // Sagittarius, Pisces
         saturn: [9, 10]   // Capricorn, Aquarius
-        // Sun: [4], Moon: [3] - not subject to Ekadhipatya reduction
     };
     
     for (const [owner, signs] of Object.entries(ownership)) {
@@ -248,7 +272,6 @@ function ekadhipatyaReduction(table, chart, planet) {
 }
 
 function isSignOccupied(sign, chart) {
-    // Check if any planet is in this sign (excluding Rahu/Ketu)
     const planets = ['sun', 'moon', 'mars', 'mercury', 'jupiter', 'venus', 'saturn'];
     return planets.some(planet => chart[planet] === sign);
 }
@@ -265,6 +288,121 @@ function calculateSarvashtakavarga(bhinnashtakavarga) {
     }
     
     return sarvashtakavarga;
+}
+
+// NEW: Calculate Rasi Gunakara, Graha Gunakara, and Shodhya Pinda
+function calculateGunakara(reducedTables, chart) {
+    const results = {};
+    
+    for (const planet in reducedTables) {
+        const reducedTable = reducedTables[planet];
+        
+        // Rasi Gunakara Calculation
+        let rasiGunakara = 0;
+        for (let sign = 0; sign < 12; sign++) {
+            rasiGunakara += reducedTable[sign] * RASI_GUNAKARA[sign];
+        }
+        
+        // Graha Gunakara Calculation
+        const planetPosition = chart[planet.toLowerCase()];
+        const bindusInPlanetSign = reducedTable[planetPosition];
+        const grahaGunakara = bindusInPlanetSign * GRAHA_GUNAKARA[planet];
+        
+        // Shodhya Pinda (Sum of both)
+        const shodhyaPinda = rasiGunakara + grahaGunakara;
+        
+        results[planet] = {
+            rasiGunakara,
+            grahaGunakara,
+            shodhyaPinda
+        };
+    }
+    
+    return results;
+}
+
+// NEW: Calculate Transit Predictions
+function calculateTransitPredictions(reducedTables, sarvashtakavarga, chart) {
+    const predictions = [];
+    
+    // Analyze each planet's transit effects
+    for (const planet in reducedTables) {
+        const reducedTable = reducedTables[planet];
+        
+        for (let sign = 0; sign < 12; sign++) {
+            const bindus = reducedTable[sign];
+            const sarvaBindus = sarvashtakavarga[sign];
+            
+            if (bindus === 0) {
+                // No bindus - negative effects
+                predictions.push({
+                    planet,
+                    sign: SIGN_NAMES[sign],
+                    effect: 'negative',
+                    message: getNegativeTransitMessage(planet, sign)
+                });
+            } else if (bindus >= 4) {
+                // High bindus - positive effects
+                predictions.push({
+                    planet,
+                    sign: SIGN_NAMES[sign],
+                    effect: 'positive', 
+                    message: getPositiveTransitMessage(planet, sign)
+                });
+            }
+        }
+    }
+    
+    // Add Sarvashtakavarga based predictions
+    for (let sign = 0; sign < 12; sign++) {
+        const bindus = sarvashtakavarga[sign];
+        
+        if (bindus > 30) {
+            predictions.push({
+                planet: 'All Planets',
+                sign: SIGN_NAMES[sign],
+                effect: 'excellent',
+                message: `Excellent period for all activities. Good for business, marriage, and new ventures.`
+            });
+        } else if (bindus < 25) {
+            predictions.push({
+                planet: 'All Planets',
+                sign: SIGN_NAMES[sign],
+                effect: 'challenging',
+                message: `Challenging period. Avoid important activities and be cautious.`
+            });
+        }
+    }
+    
+    return predictions;
+}
+
+function getPositiveTransitMessage(planet, sign) {
+    const messages = {
+        Sun: `Gain of status, government support, father's blessings`,
+        Moon: `Mental peace, mother's blessings, property gains`,
+        Mars: `Courage, property, leadership opportunities`,
+        Mercury: `Education, business, communication success`,
+        Jupiter: `Knowledge, children, wealth, spiritual growth`,
+        Venus: `Marriage, arts, vehicles, luxury items`,
+        Saturn: `Stability, long-term gains, career growth`
+    };
+    
+    return `${planet} in ${SIGN_NAMES[sign]} gives: ${messages[planet] || 'Positive results'}`;
+}
+
+function getNegativeTransitMessage(planet, sign) {
+    const messages = {
+        Sun: `Health issues, government troubles, father's problems`,
+        Moon: `Mental stress, mother's health issues, water-related problems`,
+        Mars: `Accidents, conflicts, property disputes`,
+        Mercury: `Communication issues, business losses, education obstacles`,
+        Jupiter: `Financial losses, children's issues, spiritual blocks`,
+        Venus: `Relationship problems, luxury item losses`,
+        Saturn: `Delays, obstacles, chronic health issues`
+    };
+    
+    return `${planet} in ${SIGN_NAMES[sign]} may cause: ${messages[planet] || 'Challenges and obstacles'}`;
 }
 
 function displayResults(results, chart) {
@@ -300,9 +438,23 @@ function displayResults(results, chart) {
     html += createSarvashtakavargaTable(results.sarvashtakavarga, totalBindus);
     html += '</div>';
     
+    // NEW: Display Rasi Gunakara, Graha Gunakara, and Shodhya Pinda
+    html += '<div class="table-section">';
+    html += '<h3>🧮 Rasi Gunakara & Graha Gunakara</h3>';
+    html += '<p><em>Longevity calculation factors - Rasi Gunakara + Graha Gunakara = Shodhya Pinda</em></p>';
+    html += createGunakaraTable(results.gunakaraResults);
+    html += '</div>';
+    
+    // NEW: Display Transit Predictions
+    html += '<div class="table-section">';
+    html += '<h3>🔮 Transit Predictions</h3>';
+    html += '<p><em>Effects when planets transit through different signs</em></p>';
+    html += createTransitPredictionsTable(results.transitPredictions);
+    html += '</div>';
+    
     // Display Analysis
     html += '<div class="table-section">';
-    html += '<h3>📋 Analysis</h3>';
+    html += '<h3>📋 Overall Analysis</h3>';
     html += createAnalysisTable(results, chart, totalBindus);
     html += '</div>';
     
@@ -312,7 +464,6 @@ function displayResults(results, chart) {
 function createTableHTML(tables, prefix) {
     let html = '<div class="table-container"><table><tr><th>Sign</th>';
     
-    // Header row
     const planets = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'];
     for (const planet of planets) {
         if (tables[planet]) {
@@ -321,7 +472,6 @@ function createTableHTML(tables, prefix) {
     }
     html += '</tr>';
     
-    // Data rows
     for (let sign = 0; sign < 12; sign++) {
         html += `<tr><td><strong>${SIGN_NAMES[sign]}</strong></td>`;
         for (const planet of planets) {
@@ -333,7 +483,6 @@ function createTableHTML(tables, prefix) {
         html += '</tr>';
     }
     
-    // Total row
     html += '<tr><td><strong>Total</strong></td>';
     for (const planet of planets) {
         if (tables[planet]) {
@@ -379,6 +528,71 @@ function createSarvashtakavargaTable(sarvashtakavarga, totalBindus) {
         <td><strong>${totalBindus}</strong></td>
         <td colspan="2">${totalBindus === 337 ? '✅ Correct Calculation' : '⚠️ Check Calculation'}</td>
     </tr>`;
+    
+    html += '</table>';
+    return html;
+}
+
+// NEW: Create Gunakara Table
+function createGunakaraTable(gunakaraResults) {
+    let html = '<table><tr><th>Planet</th><th>Rasi Gunakara</th><th>Graha Gunakara</th><th>Shodhya Pinda</th></tr>';
+    
+    const planets = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'];
+    
+    for (const planet of planets) {
+        if (gunakaraResults[planet]) {
+            const { rasiGunakara, grahaGunakara, shodhyaPinda } = gunakaraResults[planet];
+            
+            html += `<tr>
+                <td><strong>${planet}</strong></td>
+                <td class="bindu-cell">${rasiGunakara}</td>
+                <td class="bindu-cell">${grahaGunakara}</td>
+                <td class="bindu-cell bindu-${Math.min(8, Math.floor(shodhyaPinda/30))}"><strong>${shodhyaPinda}</strong></td>
+            </tr>`;
+        }
+    }
+    
+    html += '</table>';
+    return html;
+}
+
+// NEW: Create Transit Predictions Table
+function createTransitPredictionsTable(predictions) {
+    if (predictions.length === 0) {
+        return '<p>No significant transit predictions based on current data.</p>';
+    }
+    
+    let html = '<table><tr><th>Planet</th><th>Sign</th><th>Effect</th><th>Prediction</th></tr>';
+    
+    // Show only unique predictions (avoid duplicates)
+    const uniquePredictions = [];
+    const seenPredictions = new Set();
+    
+    for (const prediction of predictions) {
+        const key = `${prediction.planet}-${prediction.sign}-${prediction.effect}`;
+        if (!seenPredictions.has(key)) {
+            seenPredictions.add(key);
+            uniquePredictions.push(prediction);
+        }
+    }
+    
+    // Show only first 15 predictions to avoid overwhelming
+    const displayPredictions = uniquePredictions.slice(0, 15);
+    
+    for (const prediction of displayPredictions) {
+        const effectClass = prediction.effect === 'positive' || prediction.effect === 'excellent' ? 'positive-effect' : 'negative-effect';
+        
+        html += `<tr>
+            <td><strong>${prediction.planet}</strong></td>
+            <td>${prediction.sign}</td>
+            <td class="${effectClass}">${prediction.effect.toUpperCase()}</td>
+            <td>${prediction.message}</td>
+        </tr>`;
+    }
+    
+    if (uniquePredictions.length > 15) {
+        html += `<tr><td colspan="4" style="text-align: center; font-style: italic;">... and ${uniquePredictions.length - 15} more predictions</td></tr>`;
+    }
     
     html += '</table>';
     return html;
