@@ -89,6 +89,189 @@ const GRAHA_GUNAKARA = {
     Saturn: 5
 };
 
+// Transit predictions from the PDF
+const TRANSIT_PREDICTIONS = {
+    Sun: {
+        1: "Financial loss, discomfort, chest pain and aimless journey",
+        2: "Increase of expenditure, eye trouble, deceit and unhappiness",
+        3: "Increase of emoluments, freedom from sickness and destruction of enemies",
+        4: "Quarrels with wife, unhappiness in conjugal life and general ailments",
+        5: "Increase of enemies and physical indisposition",
+        6: "Success over enemies, joy and good health",
+        7: "Wearisome travelling, chest pain and stomach troubles",
+        8: "Misunderstandings with or separation from wife",
+        9: "Accidents, stomach trouble, mental worry and opposition",
+        10: "Success in endeavours, honour and realisation of ambition",
+        11: "Great success, respect, freedom from disease and prosperity",
+        12: "Success by right means, high moral character"
+    },
+    Moon: {
+        1: "Good food, comforts and clothes",
+        2: "Loss of respect, money and increase of obstacles",
+        3: "Domestic happiness and access to money",
+        4: "Loss of trust in others and lack of peace of mind",
+        5: "Indisposition, grief and disappointment",
+        6: "Happiness, success over enemies and good health",
+        7: "Respect from others and sudden influx of unexpected resources",
+        8: "Apprehension, uneasiness and worry",
+        9: "Mental pain, stomach trouble and incarceration (if indicated in horoscope)",
+        10: "Success, authority and position, realisation of ambition",
+        11: "Prosperity, new friends and good income",
+        12: "Injuries due to fall from vehicles and increased expenditure"
+    },
+    Mars: {
+        1: "Troubles from various sources and bodily affliction",
+        2: "Trouble from Government, frequent quarrels with enemies, disease, accidents, bilious complaints and loss by theft",
+        3: "Benefits through auspicious characters, financial improvement and acquisition of authority",
+        4: "Fever, stomachache, piles and blood discharges and frequent trouble from ailments",
+        5: "Trouble from enemies, illness, misunderstandings with children and loss of physical energy",
+        6: "Success over enemies, termination of strife in family, and acquisition of self-confidence",
+        7: "Frequent quarrels with wife, eye trouble and stomachache",
+        8: "Loss of blood from piles and anaemia and loss of wealth and name",
+        9: "Suffering from insults, heavy expenditure and weakness due to ill-health",
+        10: "Acquisition of money from unexpected source",
+        11: "Fame, reputation and authority",
+        12: "Unforeseen expenses, quarrels with wife, eye disease and bilious affections"
+    },
+    Mercury: {
+        1: "Loss of money due to advice by wicked men, worry due to association with tale-bearers, quarrels, imprisonment and disagreeable news while travelling",
+        2: "Disgrace, ill-treatment from relatives but acquisition of success and wealth",
+        3: "New friends, but anticipation of trouble from government and enemies; aimless roaming about due to misdeeds",
+        4: "Prosperity for relatives and family members, addition to family and gain of money",
+        5: "Quarrels with wife and children",
+        6: "Gain of renown, success and popularity",
+        7: "Bloodlessness, quarrels and mental uneasiness",
+        8: "Birth of an issue, success, happiness and acquisition of new articles",
+        9: "Obstacles and mental worry",
+        10: "Defeat of enemies, acquisition of money, happiness with wife and agreeable company",
+        11: "Acquisition of wealth; birth of a son and happiness",
+        12: "Disgrace from enemies, disease and domestic disharmony"
+    },
+    Jupiter: {
+        1: "Loss of money and intelligence; aimless roaming about and frequent quarrels",
+        2: "Happiness, domestic harmony and success over enemies",
+        3: "Moving about from place to place, obstacles to own work and loss of position",
+        4: "Troubles from relatives, development of a sense of resignation to the inevitable",
+        5: "Acquisition of servants, birth of a son, general prosperity, addition of property and development of good qualities",
+        6: "Affliction of mind, friends turning enemies and indifferent to good things",
+        7: "Happiness, erotic pleasure, good income, purchase of a conveyance and graceful speech",
+        8: "Imprisonment, disease, heavy grief and serious illness",
+        9: "Influential, birth of an issue, success in work and acquisition of wealth from unexpected source",
+        10: "Destruction of position, loss of money and health and aimless roaming about",
+        11: "Reinstatement in former position, and recovery of health",
+        12: "Fall from ideals and right conduct and increase of grief"
+    },
+    Venus: {
+        1: "Acquisition of comforts for pleasure, and a happy life",
+        2: "Acquisition of money and gifts, birth of an issue, and erotic pleasure",
+        3: "Influence, wealth and respect",
+        4: "Disgrace to enemies and general prosperity",
+        5: "Renewal of contact with friends, increase of reputation, influence and power",
+        6: "General happiness, extension of business, birth of an issue and good income",
+        7: "Humiliation, disease and danger",
+        8: "Injuries and trouble from women and mental worry",
+        9: "Acquisition of a new house, articles of luxury and wife if not married",
+        10: "Increase of virtue, happiness, wealth and performance of religious acts",
+        11: "Quarrels and disgrace",
+        12: "Acquisition of new friends, money, perfumes and clothes"
+    },
+    Saturn: {
+        1: "Fear from poison or fire, of friends and family members, fear of incarceration, travel to foreign lands, loss of money and near relatives; separation from kith and kin and suffering from insults",
+        2: "Emaciated physical appearance, loss of comfort, acquisition but not enjoyment of wealth",
+        3: "Increase of wealth and other comforts, good health, general happiness and disappearance of enemies",
+        4: "Separation from friends and family members, suspicious nature, crooked behaviour and wicked acts",
+        5: "Separation from sons, loss of money and frequent quarrels",
+        6: "Freedom from enemies and diseases, association with fair sex",
+        7: "Separation from wife and children and aimless roaming about",
+        8: "Indulgence in mean activities and bereft of happiness",
+        9: "Same results as in (8), suffers from hatred, heart trouble and even imprisonment",
+        10: "Gets new avocation, but loses money and fame",
+        11: "Frequent loss of temper but acquisition of wealth through wrong means",
+        12: "Grief, series of miseries, ill-health and general affliction"
+    }
+};
+
+// Ashtakavarga Bindu Results from PDF
+const ASHTAKAVARGA_BINDU_RESULTS = {
+    Sun: {
+        8: "Wealth and prosperity and royal favour",
+        7: "Welfare, happiness and pomp",
+        6: "Rising power",
+        5: "Wealth",
+        4: "Both good and bad will be equal",
+        3: "Fatigue through journey",
+        2: "Sinful actions", 
+        1: "Severe sickness",
+        0: "Death"
+    },
+    Moon: {
+        8: "Happiness, prosperity and help from relatives",
+        7: "Gain of clothes, agreeable food and gain of perfumes",
+        6: "Study of Mantras and association with religious heads",
+        5: "Courage and mental satisfaction",
+        4: "Misery and ill-health",
+        3: "Quarrels with relations",
+        2: "Quarrels brought about by one's wife and one's wealth",
+        1: "Irreparable losses",
+        0: "Sorrow and extreme panic"
+    },
+    Mars: {
+        8: "Gain of landed property and moneys, acquisition of a house and victory",
+        7: "Prosperity through brothers",
+        6: "Favour through kings",
+        5: "Pleasing experiences",
+        4: "Good and bad in equal proportion",
+        3: "Separation from brothers and women",
+        2: "Quarrels due to wife and wealth",
+        1: "Disease as smallpox, etc.",
+        0: "Disease in the stomach, fits and exhaustion"
+    },
+    Mercury: {
+        8: "Respect from rulers",
+        7: "Increase of wealth and learning",
+        6: "Success attending all efforts",
+        5: "Reconciliation with relations",
+        4: "Want of spirit in everything",
+        3: "Anxiety through disturbed thoughts",
+        2: "Diseases caused by mental worry",
+        1: "Imprisonment by force and unexpected calamities",
+        0: "Unexpected loss of everything and consequent mental worries"
+    },
+    Jupiter: {
+        8: "Sovereignty, ownership and kingly prosperity",
+        7: "Gain of wealth and happiness",
+        6: "Gain of clothes, vehicles and gold",
+        5: "Ruin to enemies, accomplishment of desired objects",
+        4: "Gain and loss in equal measure",
+        3: "Nervous debility and ear diseases",
+        2: "Royal frowns",
+        1: "Loss of wealth and relations",
+        0: "Derangement of the mind, loss of wealth and children"
+    },
+    Venus: {
+        8: "Comfort from good clothes, women, flowers and wholesome food",
+        7: "Gain of ornaments and pearls",
+        6: "Happiness from agreeable wife",
+        5: "Meeting with friends",
+        4: "Equal dose of good and bad",
+        3: "Quarrel with the people of the locality and relatives",
+        2: "Diseases and dismissal from service",
+        1: "Fear from water and poison",
+        0: "All sorts of calamities"
+    },
+    Saturn: {
+        8: "Acquisition of administrative control over a village or town",
+        7: "Acquisition of servants and domestic animals",
+        6: "Popularity with thieves, hill tribes and army chief",
+        5: "Gain of grain",
+        4: "Good and bad equal",
+        3: "Loss of wealth, servants, women and happiness",
+        2: "Imprisonment, fear and disease",
+        1: "Dirty fallen life",
+        0: "Ill-luck in everything"
+    }
+};
+
 function calculateAshtakavarga() {
     console.log("Calculate button clicked!");
     document.getElementById('loading').style.display = 'block';
@@ -145,13 +328,55 @@ function performRealCalculations(chart) {
     // Calculate Transit Predictions
     const transitPredictions = calculateTransitPredictions(reduced, sarvashtakavarga, chart);
     
+    // Calculate Sarvashtakavarga Special Predictions
+    const sarvaPredictions = calculateSarvashtakavargaPredictions(sarvashtakavarga, chart);
+    
     return {
         bhinnashtakavarga,
         reduced,
         sarvashtakavarga,
         gunakaraResults,
-        transitPredictions
+        transitPredictions,
+        sarvaPredictions
     };
+}
+
+// NEW: Calculate Sarvashtakavarga Special Predictions
+function calculateSarvashtakavargaPredictions(sarvashtakavarga, chart) {
+    const predictions = [];
+    
+    // Prediction 14: Fame, wealth and happiness
+    const house10 = sarvashtakavarga[(chart.ascendant + 9) % 12];
+    const house11 = sarvashtakavarga[(chart.ascendant + 10) % 12];
+    const house12 = sarvashtakavarga[(chart.ascendant + 11) % 12];
+    const house1 = sarvashtakavarga[chart.ascendant];
+    
+    if (house11 > house10 && house12 < house11 && house1 > house12) {
+        predictions.push({
+            type: "excellent",
+            message: "🎉 Fame, wealth and happiness will be vouchsafed - 11th house has more bindus than 10th, 12th has less than 11th, and ascendant has more than 12th"
+        });
+    }
+    
+    // Prediction 15: Life period analysis
+    const childhood = sarvashtakavarga.slice(11, 12).concat(sarvashtakavarga.slice(0, 4))
+        .reduce((sum, val) => sum + val, 0); // Pisces to Gemini
+    const youth = sarvashtakavarga.slice(3, 8).reduce((sum, val) => sum + val, 0); // Cancer to Libra
+    const oldAge = sarvashtakavarga.slice(7, 12).reduce((sum, val) => sum + val, 0); // Scorpio to Aquarius
+    
+    const maxPeriod = Math.max(childhood, youth, oldAge);
+    let bestPeriod = "";
+    
+    if (maxPeriod === childhood) bestPeriod = "Childhood (Pisces to Gemini)";
+    else if (maxPeriod === youth) bestPeriod = "Youth (Cancer to Libra)";
+    else bestPeriod = "Old Age (Scorpio to Aquarius)";
+    
+    predictions.push({
+        type: "life_period",
+        message: `📊 Life Period Analysis: ${bestPeriod} will be most prosperous (Childhood: ${childhood}, Youth: ${youth}, Old Age: ${oldAge})`
+    });
+    
+    return predictions;
 }
 
 function calculateBhinnashtakavarga(chart) {
@@ -290,7 +515,6 @@ function calculateSarvashtakavarga(bhinnashtakavarga) {
     return sarvashtakavarga;
 }
 
-// NEW: Calculate Rasi Gunakara, Graha Gunakara, and Shodhya Pinda
 function calculateGunakara(reducedTables, chart) {
     const results = {};
     
@@ -321,88 +545,53 @@ function calculateGunakara(reducedTables, chart) {
     return results;
 }
 
-// NEW: Calculate Transit Predictions
+// UPDATED: Calculate Transit Predictions using PDF data
 function calculateTransitPredictions(reducedTables, sarvashtakavarga, chart) {
     const predictions = [];
     
-    // Analyze each planet's transit effects
+    // Analyze each planet's transit effects from Moon sign
     for (const planet in reducedTables) {
         const reducedTable = reducedTables[planet];
         
         for (let sign = 0; sign < 12; sign++) {
             const bindus = reducedTable[sign];
-            const sarvaBindus = sarvashtakavarga[sign];
+            const houseFromMoon = (sign - chart.moon + 12) % 12 + 1;
             
-            if (bindus === 0) {
-                // No bindus - negative effects
+            // Get prediction based on house from Moon
+            if (TRANSIT_PREDICTIONS[planet] && TRANSIT_PREDICTIONS[planet][houseFromMoon]) {
+                const prediction = TRANSIT_PREDICTIONS[planet][houseFromMoon];
+                
+                // Determine effect based on bindus
+                let effect = 'neutral';
+                if (bindus === 0) effect = 'negative';
+                else if (bindus >= 4) effect = 'positive';
+                else if (bindus >= 6) effect = 'excellent';
+                
                 predictions.push({
                     planet,
                     sign: SIGN_NAMES[sign],
-                    effect: 'negative',
-                    message: getNegativeTransitMessage(planet, sign)
+                    houseFromMoon,
+                    bindus,
+                    effect,
+                    message: prediction
                 });
-            } else if (bindus >= 4) {
-                // High bindus - positive effects
+            }
+            
+            // Add Ashtakavarga bindu results
+            if (ASHTAKAVARGA_BINDU_RESULTS[planet] && ASHTAKAVARGA_BINDU_RESULTS[planet][bindus]) {
                 predictions.push({
                     planet,
                     sign: SIGN_NAMES[sign],
-                    effect: 'positive', 
-                    message: getPositiveTransitMessage(planet, sign)
+                    houseFromMoon,
+                    bindus, 
+                    effect: bindus >= 4 ? 'positive' : 'negative',
+                    message: `Ashtakavarga ${bindus} bindus: ${ASHTAKAVARGA_BINDU_RESULTS[planet][bindus]}`
                 });
             }
         }
     }
     
-    // Add Sarvashtakavarga based predictions
-    for (let sign = 0; sign < 12; sign++) {
-        const bindus = sarvashtakavarga[sign];
-        
-        if (bindus > 30) {
-            predictions.push({
-                planet: 'All Planets',
-                sign: SIGN_NAMES[sign],
-                effect: 'excellent',
-                message: `Excellent period for all activities. Good for business, marriage, and new ventures.`
-            });
-        } else if (bindus < 25) {
-            predictions.push({
-                planet: 'All Planets',
-                sign: SIGN_NAMES[sign],
-                effect: 'challenging',
-                message: `Challenging period. Avoid important activities and be cautious.`
-            });
-        }
-    }
-    
     return predictions;
-}
-
-function getPositiveTransitMessage(planet, sign) {
-    const messages = {
-        Sun: `Gain of status, government support, father's blessings`,
-        Moon: `Mental peace, mother's blessings, property gains`,
-        Mars: `Courage, property, leadership opportunities`,
-        Mercury: `Education, business, communication success`,
-        Jupiter: `Knowledge, children, wealth, spiritual growth`,
-        Venus: `Marriage, arts, vehicles, luxury items`,
-        Saturn: `Stability, long-term gains, career growth`
-    };
-    
-    return `${planet} in ${SIGN_NAMES[sign]} gives: ${messages[planet] || 'Positive results'}`;
-}
-
-function getNegativeTransitMessage(planet, sign) {
-    const messages = {
-        Sun: `Health issues, government troubles, father's problems`,
-        Moon: `Mental stress, mother's health issues, water-related problems`,
-        Mars: `Accidents, conflicts, property disputes`,
-        Mercury: `Communication issues, business losses, education obstacles`,
-        Jupiter: `Financial losses, children's issues, spiritual blocks`,
-        Venus: `Relationship problems, luxury item losses`,
-        Saturn: `Delays, obstacles, chronic health issues`
-    };
-    
-    return `${planet} in ${SIGN_NAMES[sign]} may cause: ${messages[planet] || 'Challenges and obstacles'}`;
 }
 
 function displayResults(results, chart) {
@@ -438,17 +627,24 @@ function displayResults(results, chart) {
     html += createSarvashtakavargaTable(results.sarvashtakavarga, totalBindus);
     html += '</div>';
     
-    // NEW: Display Rasi Gunakara, Graha Gunakara, and Shodhya Pinda
+    // NEW: Display Sarvashtakavarga Special Predictions
+    html += '<div class="table-section">';
+    html += '<h3>🎯 Sarvashtakavarga Special Predictions</h3>';
+    html += '<p><em>Based on classical Vedic astrology principles</em></p>';
+    html += createSarvashtakavargaPredictionsTable(results.sarvaPredictions);
+    html += '</div>';
+    
+    // Display Rasi Gunakara, Graha Gunakara, and Shodhya Pinda
     html += '<div class="table-section">';
     html += '<h3>🧮 Rasi Gunakara & Graha Gunakara</h3>';
     html += '<p><em>Longevity calculation factors - Rasi Gunakara + Graha Gunakara = Shodhya Pinda</em></p>';
     html += createGunakaraTable(results.gunakaraResults);
     html += '</div>';
     
-    // NEW: Display Transit Predictions
+    // UPDATED: Display Transit Predictions
     html += '<div class="table-section">';
-    html += '<h3>🔮 Transit Predictions</h3>';
-    html += '<p><em>Effects when planets transit through different signs</em></p>';
+    html += '<h3>🔮 Transit Predictions (Based on PDF)</h3>';
+    html += '<p><em>Effects when planets transit through different signs from Moon</em></p>';
     html += createTransitPredictionsTable(results.transitPredictions);
     html += '</div>';
     
@@ -533,7 +729,27 @@ function createSarvashtakavargaTable(sarvashtakavarga, totalBindus) {
     return html;
 }
 
-// NEW: Create Gunakara Table
+// NEW: Create Sarvashtakavarga Predictions Table
+function createSarvashtakavargaPredictionsTable(predictions) {
+    if (predictions.length === 0) {
+        return '<p>No special Sarvashtakavarga predictions based on current chart configuration.</p>';
+    }
+    
+    let html = '<div class="analysis-grid">';
+    
+    for (const prediction of predictions) {
+        const effectClass = prediction.type === 'excellent' ? 'excellent-effect' : 
+                           prediction.type === 'life_period' ? 'positive-effect' : 'neutral-effect';
+        
+        html += `<div class="analysis-card ${effectClass}">
+            <p>${prediction.message}</p>
+        </div>`;
+    }
+    
+    html += '</div>';
+    return html;
+}
+
 function createGunakaraTable(gunakaraResults) {
     let html = '<table><tr><th>Planet</th><th>Rasi Gunakara</th><th>Graha Gunakara</th><th>Shodhya Pinda</th></tr>';
     
@@ -556,42 +772,46 @@ function createGunakaraTable(gunakaraResults) {
     return html;
 }
 
-// NEW: Create Transit Predictions Table
+// UPDATED: Create Transit Predictions Table with PDF data
 function createTransitPredictionsTable(predictions) {
     if (predictions.length === 0) {
         return '<p>No significant transit predictions based on current data.</p>';
     }
     
-    let html = '<table><tr><th>Planet</th><th>Sign</th><th>Effect</th><th>Prediction</th></tr>';
+    let html = '<table><tr><th>Planet</th><th>Sign</th><th>House from Moon</th><th>Bindus</th><th>Effect</th><th>Prediction</th></tr>';
     
     // Show only unique predictions (avoid duplicates)
     const uniquePredictions = [];
     const seenPredictions = new Set();
     
     for (const prediction of predictions) {
-        const key = `${prediction.planet}-${prediction.sign}-${prediction.effect}`;
+        const key = `${prediction.planet}-${prediction.sign}-${prediction.houseFromMoon}-${prediction.message}`;
         if (!seenPredictions.has(key)) {
             seenPredictions.add(key);
             uniquePredictions.push(prediction);
         }
     }
     
-    // Show only first 15 predictions to avoid overwhelming
-    const displayPredictions = uniquePredictions.slice(0, 15);
+    // Show only first 20 predictions to avoid overwhelming
+    const displayPredictions = uniquePredictions.slice(0, 20);
     
     for (const prediction of displayPredictions) {
-        const effectClass = prediction.effect === 'positive' || prediction.effect === 'excellent' ? 'positive-effect' : 'negative-effect';
+        const effectClass = prediction.effect === 'positive' || prediction.effect === 'excellent' ? 
+                           'positive-effect' : 
+                           prediction.effect === 'negative' ? 'negative-effect' : 'challenging-effect';
         
         html += `<tr>
             <td><strong>${prediction.planet}</strong></td>
             <td>${prediction.sign}</td>
+            <td>${prediction.houseFromMoon}</td>
+            <td class="bindu-cell bindu-${prediction.bindus}">${prediction.bindus}</td>
             <td class="${effectClass}">${prediction.effect.toUpperCase()}</td>
             <td>${prediction.message}</td>
         </tr>`;
     }
     
-    if (uniquePredictions.length > 15) {
-        html += `<tr><td colspan="4" style="text-align: center; font-style: italic;">... and ${uniquePredictions.length - 15} more predictions</td></tr>`;
+    if (uniquePredictions.length > 20) {
+        html += `<tr><td colspan="6" style="text-align: center; font-style: italic;">... and ${uniquePredictions.length - 20} more predictions</td></tr>`;
     }
     
     html += '</table>';
