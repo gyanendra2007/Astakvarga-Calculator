@@ -341,28 +341,60 @@ function performRealCalculations(chart) {
     };
 }
 
-// NEW: Calculate Sarvashtakavarga Special Predictions
+// CORRECTED: Calculate Sarvashtakavarga Special Predictions
 function calculateSarvashtakavargaPredictions(sarvashtakavarga, chart) {
     const predictions = [];
     
-    // Prediction 14: Fame, wealth and happiness
+    // CORRECTION: Get houses correctly from ascendant
     const house10 = sarvashtakavarga[(chart.ascendant + 9) % 12];
     const house11 = sarvashtakavarga[(chart.ascendant + 10) % 12];
     const house12 = sarvashtakavarga[(chart.ascendant + 11) % 12];
     const house1 = sarvashtakavarga[chart.ascendant];
     
+    console.log("House Analysis:", {
+        house1: house1,
+        house10: house10,
+        house11: house11,
+        house12: house12,
+        condition1: house11 > house10,
+        condition2: house12 < house11,
+        condition3: house1 > house12
+    });
+    
+    // Prediction 14: Fame, wealth and happiness
     if (house11 > house10 && house12 < house11 && house1 > house12) {
         predictions.push({
             type: "excellent",
-            message: "🎉 Fame, wealth and happiness will be vouchsafed - 11th house has more bindus than 10th, 12th has less than 11th, and ascendant has more than 12th"
+            message: `🎉 Fame, wealth and happiness will be vouchsafed - 11th house (${house11} bindus) has more than 10th (${house10}), 12th (${house12}) has less than 11th, and ascendant (${house1}) has more than 12th`
+        });
+    } else {
+        // Show why it didn't trigger for debugging
+        predictions.push({
+            type: "info",
+            message: `ℹ️ Prediction 14 conditions: 11th (${house11}) > 10th (${house10}): ${house11 > house10}, 12th (${house12}) < 11th: ${house12 < house11}, Asc (${house1}) > 12th: ${house1 > house12}`
         });
     }
     
-    // Prediction 15: Life period analysis
-    const childhood = sarvashtakavarga.slice(11, 12).concat(sarvashtakavarga.slice(0, 4))
-        .reduce((sum, val) => sum + val, 0); // Pisces to Gemini
-    const youth = sarvashtakavarga.slice(3, 8).reduce((sum, val) => sum + val, 0); // Cancer to Libra
-    const oldAge = sarvashtakavarga.slice(7, 12).reduce((sum, val) => sum + val, 0); // Scorpio to Aquarius
+    // CORRECTION: Life period analysis with correct zodiac divisions
+    // Childhood: Pisces (11) to Gemini (2) - Signs 11, 0, 1, 2
+    const childhood = sarvashtakavarga[11] + sarvashtakavarga[0] + sarvashtakavarga[1] + sarvashtakavarga[2];
+    
+    // Youth: Cancer (3) to Libra (6) - Signs 3, 4, 5, 6
+    const youth = sarvashtakavarga[3] + sarvashtakavarga[4] + sarvashtakavarga[5] + sarvashtakavarga[6];
+    
+    // Old Age: Scorpio (7) to Aquarius (10) - Signs 7, 8, 9, 10
+    const oldAge = sarvashtakavarga[7] + sarvashtakavarga[8] + sarvashtakavarga[9] + sarvashtakavarga[10];
+    
+    console.log("Life Period Analysis:", {
+        childhood: childhood,
+        youth: youth,
+        oldAge: oldAge,
+        signs: {
+            childhood: ["Pisces", "Aries", "Taurus", "Gemini"],
+            youth: ["Cancer", "Leo", "Virgo", "Libra"],
+            oldAge: ["Scorpio", "Sagittarius", "Capricorn", "Aquarius"]
+        }
+    });
     
     const maxPeriod = Math.max(childhood, youth, oldAge);
     let bestPeriod = "";
