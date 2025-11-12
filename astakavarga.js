@@ -93,6 +93,7 @@ function calculateAshtakavarga() {
         } catch (error) {
             document.getElementById('results').innerHTML = 
                 '<div style="color: red; text-align: center; padding: 20px;">Error in calculation: ' + error.message + '</div>';
+            console.error('Calculation error:', error);
         }
         document.getElementById('loading').style.display = 'none';
     }, 500);
@@ -274,6 +275,9 @@ function calculateSarvashtakavarga(bhinnashtakavarga) {
 function displayResults(results, chart) {
     let html = '';
     
+    // Calculate total bindus for verification
+    const totalBindus = results.sarvashtakavarga.reduce((sum, val) => sum + val, 0);
+    
     // Display Planet Positions
     html += '<div class="table-section">';
     html += '<h3>📊 Planet Positions</h3>';
@@ -298,13 +302,13 @@ function displayResults(results, chart) {
     html += '<div class="table-section">';
     html += '<h3>📈 Sarvashtakavarga (Combined Table)</h3>';
     html += '<p><em>Total bindus in each sign from all planets</em></p>';
-    html += createSarvashtakavargaTable(results.sarvashtakavarga);
+    html += createSarvashtakavargaTable(results.sarvashtakavarga, totalBindus);
     html += '</div>';
     
     // Display Analysis
     html += '<div class="table-section">';
     html += '<h3>📋 Analysis</h3>';
-    html += createAnalysisTable(results, chart);
+    html += createAnalysisTable(results, chart, totalBindus);
     html += '</div>';
     
     document.getElementById('results').innerHTML = html;
@@ -348,10 +352,8 @@ function createTableHTML(tables, prefix) {
     return html;
 }
 
-function createSarvashtakavargaTable(sarvashtakavarga) {
+function createSarvashtakavargaTable(sarvashtakavarga, totalBindus) {
     let html = '<table><tr><th>Sign</th><th>Bindus</th><th>Effect</th><th>Recommendation</th></tr>';
-    
-    const totalBindus = sarvashtakavarga.reduce((sum, val) => sum + val, 0);
     
     for (let sign = 0; sign < 12; sign++) {
         const bindus = sarvashtakavarga[sign];
@@ -414,7 +416,7 @@ function createPlanetPositionTable(chart) {
     return html;
 }
 
-function createAnalysisTable(results, chart) {
+function createAnalysisTable(results, chart, totalBindus) {
     const sarvashtakavarga = results.sarvashtakavarga;
     
     let html = '<div class="analysis-grid">';
@@ -467,7 +469,7 @@ function createAnalysisTable(results, chart) {
     
     html += `<div class="analysis-card">
         <h4>📊 Overall Quality</h4>
-        <p><strong>${totalBindus === 337 ? '✅ Perfect Calculation' : '⚠️ Needs Verification'}</p>
+        <p><strong>${totalBindus === 337 ? '✅ Perfect Calculation' : '⚠️ Needs Verification'}</strong></p>
         <p>Total Bindus: ${totalBindus}/337</p>
     </div>`;
     
@@ -475,7 +477,7 @@ function createAnalysisTable(results, chart) {
     return html;
 }
 
-// Add this CSS to your style.css for the analysis cards
+// Add additional CSS for the analysis cards
 const additionalCSS = `
 .analysis-grid {
     display: grid;
