@@ -460,6 +460,11 @@ function ekadhipatyaReduction(table, chart, planet) {
         const val1 = reduced[sign1];
         const val2 = reduced[sign2];
         
+        // NEW: Rule 17 - Do not effect any reduction if there is no figure in one of the two houses
+        if (val1 === 0 || val2 === 0) {
+            continue; // Skip reduction for this pair
+        }
+        
         // Check if signs are occupied
         const sign1Occupied = isSignOccupied(sign1, chart);
         const sign2Occupied = isSignOccupied(sign2, chart);
