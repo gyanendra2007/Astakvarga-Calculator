@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashtakavarga Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Ashtakavarga Calculator</h1>
+            <p>Based on Classical Vedic Astrology Principles</p>
+        </header>
+
+        <div class="input-section">
+            <h2>Enter Birth Chart Details</h2>
+            
+            <div class="planet-grid">
+                <div class="planet-input">
+                    <label for="ascendant">Ascendant (Lagna):</label>
+                    <select id="ascendant">
+                        <option value="0">Aries (1)</option>
+                        <option value="1">Taurus (2)</option>
+                        <option value="2">Gemini (3)</option>
+                        <option value="3">Cancer (4)</option>
+                        <option value="4">Leo (5)</option>
+                        <option value="5">Virgo (6)</option>
+                        <option value="6">Libra (7)</option>
+                        <option value="7">Scorpio (8)</option>
+                        <option value="8">Sagittarius (9)</option>
+                        <option value="9">Capricorn (10)</option>
+                        <option value="10">Aquarius (11)</option>
+                        <option value="11">Pisces (12)</option>
+                    </select>
+                </div>
+
+                <div class="planet-input">
+                    <label for="sun">Sun:</label>
+                    <select id="sun">
+                        <option value="3">Cancer</option>
+                        <option value="0">Aries</option>
+                        <option value="1">Taurus</option>
+                        <option value="2">Gemini</option>
+                        <option value="4">Leo</option>
+                        <option value="5">Virgo</option>
+                        <option value="6">Libra</option>
+                        <option value="7">Scorpio</option>
+                        <option value="8">Sagittarius</option>
+                        <option value="9">Capricorn</option>
+                        <option value="10">Aquarius</option>
+                        <option value="11">Pisces</option>
+                    </select>
+                </div>
+
+                <div class="planet-input">
+                    <label for="moon">Moon:</label>
+                    <select id="moon">
+                        <option value="1">Taurus</option>
+                        <option value="0">Aries</option>
+                        <option value="2">Gemini</option>
+                        <option value="3">Cancer</option>
+                        <option value="4">Leo</option>
+                        <option value="5">Virgo</option>
+                        <option value="6">Libra</option>
+                        <option value="7">Scorpio</option>
+                        <option value="8">Sagittarius</option>
+                        <option value="9">Capricorn</option>
+                        <option value="10">Aquarius</option>
+                        <option value="11">Pisces</option>
+                    </select>
+                </div>
+
+                <div class="planet-input">
+                    <label for="mars">Mars:</label>
+                    <select id="mars">
+                        <option value="4">Leo</option>
+                        <option value="0">Aries</option>
+                        <option value="1">Taurus</option>
+                        <option value="2">Gemini</option>
+                        <option value="3">Cancer</option>
+                        <option value="5">Virgo</option>
+                        <option value="6">Libra</option>
+                        <option value="7">Scorpio</option>
+                        <option value="8">Sagittarius</option>
+                        <option value="9">Capricorn</option>
+                        <option value="10">Aquarius</option>
+                        <option value="11">Pisces</option>
+                    </select>
+                </div>
+
+                <div class="planet-input">
+                    <label for="mercury">Mercury:</label>
+                    <select id="mercury">
+                        <option value="4">Leo</option>
+                        <option value="0">Aries</option>
+                        <option value="1">Taurus</option>
+                        <option value="2">Gemini</option>
+                        <option value="3">Cancer</option>
+                        <option value="5">Virgo</option>
+                        <option value="6">Libra</option>
+                        <option value="7">Scorpio</option>
+                        <option value="8">Sagittarius</option>
+                        <option value="9">Capricorn</option>
+                        <option value="10">Aquarius</option>
+                        <option value="11">Pisces</option>
+                    </select>
+                </div>
+
+                <div class="planet-input">
+                    <label for="jupiter">Jupiter:</label>
+                    <select id="jupiter">
+                        <option value="7">Scorpio</option>
+                        <option value="0">Aries</option>
+                        <option value="1">Taurus</option>
+                        <option value="2">Gemini</option>
+                        <option value="3">Cancer</option>
+                        <option value="4">Leo</option>
+                        <option value="5">Virgo</option>
+                        <option value="6">Libra</option>
+                        <option value="8">Sagittarius</option>
+                        <option value="9">Capricorn</option>
+                        <option value="10">Aquarius</option>
+                        <option value="11">Pisces</option>
+                    </select>
+                </div>
+
+                <div class="planet-input">
+                    <label for="venus">Venus:</label>
+                    <select id="venus">
+                        <option value="4">Leo</option>
+                        <option value="0">Aries</option>
+                        <option value="1">Taurus</option>
+                        <option value="2">Gemini</option>
+                        <option value="3">Cancer</option>
+                        <option value="5">Virgo</option>
+                        <option value="6">Libra</option>
+                        <option value="7">Scorpio</option>
+                        <option value="8">Sagittarius</option>
+                        <option value="9">Capricorn</option>
+                        <option value="10">Aquarius</option>
+                        <option value="11">Pisces</option>
+                    </select>
+                </div>
+
+                <div class="planet-input">
+                    <label for="saturn">Saturn:</label>
+                    <select id="saturn">
+                        <option value="1">Taurus</option>
+                        <option value="0">Aries</option>
+                        <option value="2">Gemini</option>
+                        <option value="3">Cancer</option>
+                        <option value="4">Leo</option>
+                        <option value="5">Virgo</option>
+                        <option value="6">Libra</option>
+                        <option value="7">Scorpio</option>
+                        <option value="8">Sagittarius</option>
+                        <option value="9">Capricorn</option>
+                        <option value="10">Aquarius</option>
+                        <option value="11">Pisces</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="calculateAshtakavarga()" class="calculate-btn">
+                Calculate Ashtakavarga
+            </button>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            Calculating Ashtakavarga...
+        </div>
+
+        <div id="results" class="results"></div>
+    </div>
+
+    <script src="ashtakavarga.js"></script>
+</body>
+</html>
