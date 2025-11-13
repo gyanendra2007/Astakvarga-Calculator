@@ -336,3 +336,46 @@ tr:hover {
     padding: 4px 8px;
     border-radius: 4px;
 }
+/* Pagination Styles */
+.transit-predictions-container {
+    margin-bottom: 20px;
+}
+
+.pagination-info {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #2c3e50;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    padding: 8px 12px;
+    border: 2px solid #667eea;
+    background: white;
+    color: #667eea;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.page-btn:hover {
+    background: #667eea;
+    color: white;
+}
+
+.page-btn.active {
+    background: #667eea;
+    color: white;
+}
