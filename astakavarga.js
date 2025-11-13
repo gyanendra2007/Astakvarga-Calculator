@@ -809,13 +809,11 @@ function createGunakaraTable(gunakaraResults) {
     return html;
 }
 
-// UPDATED: Create Transit Predictions Table with PDF data
+// UPDATED: Create Transit Predictions Table with Pagination
 function createTransitPredictionsTable(predictions) {
     if (predictions.length === 0) {
         return '<p>No significant transit predictions based on current data.</p>';
     }
-    
-    let html = '<table><tr><th>Planet</th><th>Sign</th><th>House from Moon</th><th>Bindus</th><th>Effect</th><th>Prediction</th></tr>';
     
     // Show only unique predictions (avoid duplicates)
     const uniquePredictions = [];
@@ -829,30 +827,135 @@ function createTransitPredictionsTable(predictions) {
         }
     }
     
-    // Show only first 20 predictions to avoid overwhelming
-    const displayPredictions = uniquePredictions.slice(0, 20);
+    // Sort predictions by planet for better organization
+    uniquePredictions.sort((a, b) => {
+        const planetOrder = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'];
+        return planetOrder.indexOf(a.planet) - planetOrder.indexOf(b.planet);
+    });
     
-    for (const prediction of displayPredictions) {
+    // Create pagination - show 20 predictions per page
+    const predictionsPerPage = 20;
+    const totalPages = Math.ceil(uniquePredictions.length / predictionsPerPage);
+    
+    let html = `
+        <div class="transit-predictions-container">
+            <div class="pagination-info">
+                Showing 1-${Math.min(predictionsPerPage, uniquePredictions.length)} of ${uniquePredictions.length} predictions
+                ${totalPages > 1 ? `(Page 1 of ${totalPages})` : ''}
+            </div>
+            <table>
+                <tr>
+                    <th>Planet</th>
+                    <th>Sign</th>
+                    <th>House from Moon</th>
+                    <th>Bindus</th>
+                    <th>Effect</th>
+                    <th>Prediction</th>
+                </tr>
+    `;
+    
+    // Show first page
+    const firstPagePredictions = uniquePredictions.slice(0, predictionsPerPage);
+    
+    for (const prediction of firstPagePredictions) {
         const effectClass = prediction.effect === 'positive' || prediction.effect === 'excellent' ? 
                            'positive-effect' : 
                            prediction.effect === 'negative' ? 'negative-effect' : 'challenging-effect';
         
-        html += `<tr>
-            <td><strong>${prediction.planet}</strong></td>
-            <td>${prediction.sign}</td>
-            <td>${prediction.houseFromMoon}</td>
-            <td class="bindu-cell bindu-${prediction.bindus}">${prediction.bindus}</td>
-            <td class="${effectClass}">${prediction.effect.toUpperCase()}</td>
-            <td>${prediction.message}</td>
-        </tr>`;
-    }
-    
-    if (uniquePredictions.length > 20) {
-        html += `<tr><td colspan="6" style="text-align: center; font-style: italic;">... and ${uniquePredictions.length - 20} more predictions</td></tr>`;
+        html += `
+            <tr>
+                <td><strong>${prediction.planet}</strong></td>
+                <td>${prediction.sign}</td>
+                <td>${prediction.houseFromMoon}</td>
+                <td class="bindu-cell bindu-${prediction.bindus}">${prediction.bindus}</td>
+                <td class="${effectClass}">${prediction.effect.toUpperCase()}</td>
+                <td>${prediction.message}</td>
+            </tr>
+        `;
     }
     
     html += '</table>';
+    
+    // Add pagination controls if there are multiple pages
+    if (totalPages > 1) {
+        html += `
+            <div class="pagination-controls">
+                <button onclick="showTransitPage(1, this)" class="page-btn active" data-page="1">1</button>
+        `;
+        
+        for (let i = 2; i <= totalPages; i++) {
+            html += `<button onclick="showTransitPage(${i}, this)" class="page-btn" data-page="${i}">${i}</button>`;
+        }
+        
+        html += `</div>`;
+        
+        // Store predictions globally for pagination
+        window.allTransitPredictions = uniquePredictions;
+        window.transitPredictionsPerPage = predictionsPerPage;
+    }
+    
+    html += '</div>';
     return html;
+}
+
+// Global function for pagination
+function showTransitPage(pageNumber, buttonElement) {
+    const predictions = window.allTransitPredictions;
+    const predictionsPerPage = window.transitPredictionsPerPage;
+    
+    if (!predictions) return;
+    
+    const startIndex = (pageNumber - 1) * predictionsPerPage;
+    const endIndex = startIndex + predictionsPerPage;
+    const pagePredictions = predictions.slice(startIndex, endIndex);
+    
+    // Update the table
+    const table = document.querySelector('.transit-predictions-container table');
+    if (table) {
+        // Remove existing rows (except header)
+        const rows = table.querySelectorAll('tr');
+        for (let i = rows.length - 1; i > 0; i--) {
+            rows[i].remove();
+        }
+        
+        // Add new rows
+        const tbody = table.querySelector('tbody') || table;
+        
+        for (const prediction of pagePredictions) {
+            const effectClass = prediction.effect === 'positive' || prediction.effect === 'excellent' ? 
+                               'positive-effect' : 
+                               prediction.effect === 'negative' ? 'negative-effect' : 'challenging-effect';
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${prediction.planet}</strong></td>
+                <td>${prediction.sign}</td>
+                <td>${prediction.houseFromMoon}</td>
+                <td class="bindu-cell bindu-${prediction.bindus}">${prediction.bindus}</td>
+                <td class="${effectClass}">${prediction.effect.toUpperCase()}</td>
+                <td>${prediction.message}</td>
+            `;
+            tbody.appendChild(row);
+        }
+    }
+    
+    // Update pagination info
+    const paginationInfo = document.querySelector('.pagination-info');
+    if (paginationInfo) {
+        paginationInfo.innerHTML = `
+            Showing ${startIndex + 1}-${Math.min(endIndex, predictions.length)} of ${predictions.length} predictions
+            (Page ${pageNumber} of ${Math.ceil(predictions.length / predictionsPerPage)})
+        `;
+    }
+    
+    // Update active page button
+    const pageButtons = document.querySelectorAll('.page-btn');
+    pageButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (parseInt(btn.dataset.page) === pageNumber) {
+            btn.classList.add('active');
+        }
+    });
 }
 
 function createPlanetPositionTable(chart) {
