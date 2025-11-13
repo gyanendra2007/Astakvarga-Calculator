@@ -325,8 +325,8 @@ function performRealCalculations(chart) {
     // Calculate Rasi Gunakara, Graha Gunakara, and Shodhya Pinda
     const gunakaraResults = calculateGunakara(reduced, chart);
     
-    // Calculate Transit Predictions
-    const transitPredictions = calculateTransitPredictions(reduced, sarvashtakavarga, chart);
+    // CORRECTED: Calculate Transit Predictions using BEFORE REDUCTION tables
+    const transitPredictions = calculateTransitPredictions(bhinnashtakavarga, sarvashtakavarga, chart);
     
     // Calculate Sarvashtakavarga Special Predictions
     const sarvaPredictions = calculateSarvashtakavargaPredictions(sarvashtakavarga, chart);
@@ -582,19 +582,19 @@ function calculateGunakara(reducedTables, chart) {
     return results;
 }
 
-// UPDATED: Calculate Transit Predictions using PDF data
-function calculateTransitPredictions(reducedTables, sarvashtakavarga, chart) {
+// CORRECTED: Calculate Transit Predictions using PDF data - Using BEFORE REDUCTION tables
+function calculateTransitPredictions(bhinnashtakavarga, sarvashtakavarga, chart) {
     const predictions = [];
     
-    // Analyze each planet's transit effects from Moon sign
-    for (const planet in reducedTables) {
-        const reducedTable = reducedTables[planet];
+    // Analyze each planet's transit effects from Moon sign - Using BHINNASHTAKAVARGA (before reduction)
+    for (const planet in bhinnashtakavarga) {
+        const planetTable = bhinnashtakavarga[planet];
         
         for (let sign = 0; sign < 12; sign++) {
-            const bindus = reducedTable[sign];
+            const bindus = planetTable[sign];
             const houseFromMoon = (sign - chart.moon + 12) % 12 + 1;
             
-            // Get prediction based on house from Moon
+            // Get prediction based on house from Moon for ALL 7 planets
             if (TRANSIT_PREDICTIONS[planet] && TRANSIT_PREDICTIONS[planet][houseFromMoon]) {
                 const prediction = TRANSIT_PREDICTIONS[planet][houseFromMoon];
                 
@@ -614,7 +614,7 @@ function calculateTransitPredictions(reducedTables, sarvashtakavarga, chart) {
                 });
             }
             
-            // Add Ashtakavarga bindu results
+            // Add Ashtakavarga bindu results for ALL planets
             if (ASHTAKAVARGA_BINDU_RESULTS[planet] && ASHTAKAVARGA_BINDU_RESULTS[planet][bindus]) {
                 predictions.push({
                     planet,
@@ -622,7 +622,7 @@ function calculateTransitPredictions(reducedTables, sarvashtakavarga, chart) {
                     houseFromMoon,
                     bindus, 
                     effect: bindus >= 4 ? 'positive' : 'negative',
-                    message: `Ashtakavarga ${bindus} bindus: ${ASHTAKAVARGA_BINDU_RESULTS[planet][bindus]}`
+                    message: `${planet}'s Ashtakavarga ${bindus} bindus: ${ASHTAKAVARGA_BINDU_RESULTS[planet][bindus]}`
                 });
             }
         }
@@ -678,10 +678,10 @@ function displayResults(results, chart) {
     html += createGunakaraTable(results.gunakaraResults);
     html += '</div>';
     
-    // UPDATED: Display Transit Predictions
+    // In displayResults function, update the transit predictions section:
     html += '<div class="table-section">';
     html += '<h3>🔮 Transit Predictions (Based on PDF)</h3>';
-    html += '<p><em>Effects when planets transit through different signs from Moon</em></p>';
+    html += '<p><em>Effects when planets transit through different signs from Moon - Using Bhinnashtakavarga (Before Reduction)</em></p>';
     html += createTransitPredictionsTable(results.transitPredictions);
     html += '</div>';
     
