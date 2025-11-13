@@ -896,7 +896,7 @@ function createTransitPredictionsTable(predictions) {
     
     html += '</div>';
     return html;
-}
+} 
 
 // Global function for pagination
 function showTransitPage(pageNumber, buttonElement) {
